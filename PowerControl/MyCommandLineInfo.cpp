@@ -3,6 +3,14 @@
 #include "CPowerGPIBDev.h"
 
 
+
+#include "..\\PowerControl\\ProcessLog\\ProcessLog.h"
+#ifdef _WIN64
+#pragma comment(lib,"..\\PowerControl\\ProcessLog\\x64\\ProcessLog.lib")
+#else
+#pragma comment(lib,"..\\PowerControl\\ProcessLog\\x86\\ProcessLog.lib")
+#endif
+
 MyCommandLineInfo::MyCommandLineInfo()
 {
 	nParam = 0;
@@ -43,15 +51,23 @@ void MyCommandLineInfo::OpenPower()
 	
 	if (::CoInitialize(NULL) == E_INVALIDARG)
 	{
+		ProcessLog(L"CoInitialize Fail", LOGDEBUG);
 		return;
 	}
 
 	if (!spPowerDisp1.CreateDispatch(_T("Power.GPiBDev")))
 	{
-
+		ProcessLog(L"spPowerDisp1.CreateDispatch Fail", LOGDEBUG);
 	}
 	else
 	{
+		for (int i = 0; i < ParamNum; i++)
+		{
+			ProcessLog(param[i].GetBuffer(), LOGDEBUG);
+			param[i].ReleaseBuffer();
+		}
+			
+
 		if (param[OPENCLOSE] == _T("1"))
 		{
 			float fCurr;
@@ -67,6 +83,7 @@ void MyCommandLineInfo::OpenPower()
 			spPowerDisp1.SetVolt(fVol);
 			spPowerDisp1.PowerOn();
 			spPowerDisp1.ReleaseDispatch();
+			ProcessLog(_T("打开电源"), LOGDEBUG);
 		}
 		else
 		{
@@ -78,6 +95,7 @@ void MyCommandLineInfo::OpenPower()
 			spPowerDisp1.PowerOff();
 			spPowerDisp1.Close();
 			spPowerDisp1.ReleaseDispatch();
+			ProcessLog(_T("关闭电源"), LOGDEBUG);
 		}
 
 	}

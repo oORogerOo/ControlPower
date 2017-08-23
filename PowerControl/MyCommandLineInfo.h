@@ -8,7 +8,6 @@ enum ParamType
 	GPIBAddr,
 	VOL,
 	CURR,
-	OPENTIME,
 	OPENCLOSE,
 	ParamNum,
 };

@@ -5,6 +5,8 @@
 #import "C:\\Program Files\\Common Files\\Huaqin\\Power.dll" no_namespace
 #endif
 
+
+
 // CPowerGPIBDev °ü×°Æ÷Àà
 
 class CPowerGPIBDev : public COleDispatchDriver
